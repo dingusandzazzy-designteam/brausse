@@ -292,7 +292,7 @@ h1, h2, h3, h4 {
 }
 
 .header__logo-img {
-  height: 30px;
+  height: 39px;
   width: auto;
   display: block;
 }
@@ -597,8 +597,8 @@ h1, h2, h3, h4 {
   margin-inline: auto;
   padding-inline: var(--gutter);
   display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
-  gap: clamp(2.5rem, 5vw, 6rem);
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.7fr);
+  gap: clamp(2rem, 4vw, 5rem);
   align-items: center;
 }
 
@@ -662,17 +662,12 @@ h1, h2, h3, h4 {
   overflow: visible;
 }
 
-.na-map__land {
+.na-map__state {
   fill: oklch(93% 0.022 65);
-  stroke: oklch(70% 0.05 60);
-  stroke-width: 1.2;
+  stroke: oklch(74% 0.05 60);
+  stroke-width: 0.9;
   stroke-linejoin: round;
-}
-
-.na-map__lakes ellipse {
-  fill: var(--c-surface);
-  stroke: oklch(70% 0.05 60);
-  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
 }
 
 .map-dot {
@@ -694,8 +689,8 @@ h1, h2, h3, h4 {
 }
 
 @keyframes dot-pulse {
-  0%, 100% { opacity: 0.92; r: 6; }
-  50%       { opacity: 0.5; r: 8; }
+  0%, 100% { opacity: 0.92; r: 7; }
+  50%       { opacity: 0.5; r: 9.5; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1441,7 +1436,7 @@ h1, h2, h3, h4 {
   }
 
   .header__logo-img {
-    height: 24px;
+    height: 31px;
   }
 
   /* Hero */
