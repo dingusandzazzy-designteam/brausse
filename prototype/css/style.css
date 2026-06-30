@@ -745,18 +745,22 @@ h1, h2, h3, h4 {
   padding-inline: var(--gutter);
 }
 
-.products__header {
-  margin-bottom: var(--sp-xl);
+/* Two-column layout: copy left, machine slider right */
+.products__layout {
+  display: grid;
+  grid-template-columns: 1.02fr 1fr;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: center;
 }
 
-.products__header h2 {
+.products__text h2 {
   font-size: var(--t-display-l);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.05;
   color: var(--c-text);
   margin-bottom: var(--sp-md);
-  max-width: 20ch;
+  max-width: 16ch;
 }
 
 .products__category-strip {
@@ -783,71 +787,49 @@ h1, h2, h3, h4 {
 .products__intro-body {
   font-size: var(--t-body-l);
   color: var(--c-text-muted-l);
-  line-height: 1.65;
-  max-width: 72ch;
+  line-height: 1.6;
+  max-width: 52ch;
+  margin-bottom: var(--sp-lg);
 }
 
-/* Configurator */
-.products__configurator {
-  display: grid;
-  grid-template-columns: 1fr 420px;
-  gap: clamp(2rem, 4vw, 5rem);
-  align-items: start;
+/* Machine slider */
+.products__slider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
 }
 
-/* Image area */
-.products__image-area {
+.products__slides {
   position: relative;
-  aspect-ratio: 4/3;
+  aspect-ratio: 4 / 3;
+  background: var(--c-surface);
   overflow: hidden;
 }
 
-.products__img {
+.products__slide {
   position: absolute;
   inset: 0;
+  margin: 0;
   opacity: 0;
-  transform: translateX(12px);
-  transition: opacity 350ms var(--ease-out), transform 350ms var(--ease-out);
+  transform: scale(1.03);
+  transition: opacity 500ms var(--ease-out), transform 600ms var(--ease-out);
+  pointer-events: none;
 }
 
-.products__img.products__img--active {
+.products__slide--active {
   opacity: 1;
-  transform: translateX(0);
+  transform: scale(1);
+  pointer-events: auto;
 }
 
-.products__img-placeholder {
-  position: absolute;
-  inset: 0;
-}
-
-.products__img-placeholder--fc {
-  background:
-    linear-gradient(135deg, oklch(94% 0.004 80) 0%, oklch(89% 0.005 70) 100%);
-  background-image:
-    linear-gradient(135deg, oklch(94% 0.004 80) 0%, oklch(89% 0.005 70) 100%),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 80px,
-      oklch(80% 0.005 80 / 0.3) 80px,
-      oklch(80% 0.005 80 / 0.3) 81px
-    );
-}
-
-.products__img-placeholder--corr {
-  background: linear-gradient(135deg, oklch(92% 0.003 80) 0%, oklch(87% 0.004 60) 100%);
-}
-
-.products__img-photo {
-  position: absolute;
-  inset: 0;
+.products__slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
 }
 
-.products__img-tag {
+.products__slide-tag {
   position: absolute;
   bottom: var(--sp-md);
   left: var(--sp-md);
@@ -858,7 +840,9 @@ h1, h2, h3, h4 {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--c-text-muted-l);
+  color: var(--c-white);
+  background: oklch(10% 0.006 20 / 0.55);
+  padding: 0.375rem 0.75rem;
 }
 
 .products__img-tag-line {
@@ -868,15 +852,52 @@ h1, h2, h3, h4 {
   background: var(--c-accent);
 }
 
-.products__img-tag--light {
-  color: var(--c-text-muted);
-  background: oklch(10% 0.006 20 / 0.5);
-  padding: 0.375rem 0.75rem;
+/* Slider controls */
+.products__slider-ctrl {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
 }
 
-/* Panel */
-.products__panel {
-  padding-top: var(--sp-sm);
+.products__arrow {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--c-border-l);
+  color: var(--c-text);
+  font-size: 1.5rem;
+  line-height: 1;
+  border-radius: 3px;
+  transition: background 200ms var(--ease-out), color 200ms var(--ease-out), border-color 200ms var(--ease-out);
+}
+
+.products__arrow:hover {
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  color: var(--c-bg);
+}
+
+.products__dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-inline: 0.5rem auto;
+}
+
+.products__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c-border-l);
+  transition: background 250ms var(--ease-out), width 250ms var(--ease-out);
+}
+
+.products__dot--active {
+  background: var(--c-accent);
+  width: 22px;
+  border-radius: 4px;
 }
 
 .products__tabs {
@@ -1404,11 +1425,16 @@ h1, h2, h3, h4 {
    RESPONSIVE — TABLET
 ================================================================ */
 @media (max-width: 1024px) {
-  .products__configurator {
+  .products__layout {
     grid-template-columns: 1fr;
+    gap: var(--sp-lg);
   }
 
-  .products__image-area {
+  .products__slider {
+    order: -1;
+  }
+
+  .products__slides {
     aspect-ratio: 16/9;
   }
 

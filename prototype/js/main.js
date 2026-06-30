@@ -204,57 +204,52 @@
 
 
   /* ----------------------------------------------------------------
-     PRODUCT TABS
+     PRODUCTS — tabs + synced machine slider (dots + arrows)
   ---------------------------------------------------------------- */
-  (function initProductTabs() {
+  (function initProducts() {
     const tabList = document.querySelector('.products__tabs');
     if (!tabList) return;
 
-    const tabs     = tabList.querySelectorAll('.products__tab');
-    const panels   = document.querySelectorAll('.products__content');
-    const images   = document.querySelectorAll('.products__img');
+    const tabs   = Array.from(tabList.querySelectorAll('.products__tab'));
+    const panels = Array.from(document.querySelectorAll('.products__content'));
+    const slides = Array.from(document.querySelectorAll('.products__slide'));
+    const dots   = Array.from(document.querySelectorAll('.products__dot'));
+    const arrows = Array.from(document.querySelectorAll('.products__arrow'));
 
-    function activateTab(targetTab) {
-      const targetKey = targetTab.dataset.tab;
+    // Order of the slider keys, taken from the tab order.
+    const keys = tabs.map(t => t.dataset.tab);
+    let current = 0;
+
+    function activate(key) {
+      current = Math.max(0, keys.indexOf(key));
 
       tabs.forEach(tab => {
-        const isActive = tab === targetTab;
-        tab.classList.toggle('products__tab--active', isActive);
-        tab.setAttribute('aria-selected', String(isActive));
+        const on = tab.dataset.tab === key;
+        tab.classList.toggle('products__tab--active', on);
+        tab.setAttribute('aria-selected', String(on));
       });
+      panels.forEach(p => p.toggleAttribute('hidden', p.id !== `tab-${key}`));
+      slides.forEach(s => s.classList.toggle('products__slide--active', s.dataset.tab === key));
+      dots.forEach(d => d.classList.toggle('products__dot--active', d.dataset.tab === key));
+    }
 
-      panels.forEach(panel => {
-        const isActive = panel.id === `tab-${targetKey}`;
-        if (isActive) {
-          panel.removeAttribute('hidden');
-        } else {
-          panel.setAttribute('hidden', '');
-        }
-      });
-
-      images.forEach(img => {
-        const isActive = img.dataset.tab === targetKey;
-        img.classList.toggle('products__img--active', isActive);
-      });
+    function step(dir) {
+      const next = (current + dir + keys.length) % keys.length;
+      activate(keys[next]);
     }
 
     tabs.forEach(tab => {
-      tab.addEventListener('click', () => activateTab(tab));
+      tab.addEventListener('click', () => activate(tab.dataset.tab));
       tab.addEventListener('keydown', e => {
-        let newTab;
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-          const idx = Array.from(tabs).indexOf(tab);
-          newTab = tabs[(idx + 1) % tabs.length];
-        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-          const idx = Array.from(tabs).indexOf(tab);
-          newTab = tabs[(idx - 1 + tabs.length) % tabs.length];
-        }
-        if (newTab) {
-          newTab.focus();
-          activateTab(newTab);
-        }
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); step(1); tabs[current].focus(); }
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); step(-1); tabs[current].focus(); }
       });
     });
+
+    dots.forEach(dot => dot.addEventListener('click', () => activate(dot.dataset.tab)));
+    arrows.forEach(arrow =>
+      arrow.addEventListener('click', () => step(arrow.dataset.dir === 'next' ? 1 : -1))
+    );
   })();
 
 })();

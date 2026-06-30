@@ -218,77 +218,62 @@
     ============================================================ -->
     <section class="products" id="products" aria-label="The ETERNA product line">
       <div class="products__inner">
+        <div class="products__layout">
 
-        <header class="products__header reveal-item">
-          <p class="eyebrow">THE ETERNA LINE</p>
-          <h2>One Line. Every Stage of the Job.</h2>
-          <div class="products__category-strip" aria-label="Equipment categories">
-            <span>Die Cutters</span>
-            <span aria-hidden="true" class="strip-sep">—</span>
-            <span>Blankers</span>
-            <span aria-hidden="true" class="strip-sep">—</span>
-            <span>Folder/Gluers</span>
-            <span aria-hidden="true" class="strip-sep">—</span>
-            <span>Foil Stamping</span>
-          </div>
-          <p class="products__intro-body">Brausse Group is the exclusive North American dealer for ETERNA and ETERNA ELITE. You get BOBST Group engineering scaled to match the true speed of carton and corrugated production. We leave the inflated enterprise pricing behind. Instead, we deliver the heavy-duty machinery you need to keep your floor moving shift after shift.</p>
-        </header>
-
-        <div class="products__configurator reveal-item">
-          <!-- Image area -->
-          <div class="products__image-area" id="product-image-area" aria-live="polite">
-            <div class="products__img products__img--active" data-tab="folding-carton">
-              <img src="prototype/assets/image-2.png" alt="ETERNA eCUT 1060 ELITE ER folding carton die cutter" class="products__img-photo" loading="lazy">
-              <div class="products__img-tag" aria-hidden="true">
-                <span class="products__img-tag-line"></span>
-                <span>eCUT 1060 ELITE ER</span>
-              </div>
+          <!-- LEFT — copy + tabs -->
+          <div class="products__text reveal-item">
+            <p class="eyebrow">THE ETERNA LINE</p>
+            <h2>One Line. Every Stage of the Job.</h2>
+            <div class="products__category-strip" aria-label="Equipment categories">
+              <span>Die Cutters</span>
+              <span aria-hidden="true" class="strip-sep">—</span>
+              <span>Blankers</span>
+              <span aria-hidden="true" class="strip-sep">—</span>
+              <span>Folder/Gluers</span>
+              <span aria-hidden="true" class="strip-sep">—</span>
+              <span>Foil Stamping</span>
             </div>
-            <div class="products__img" data-tab="corrugated">
-              <img src="prototype/assets/image-4.png" alt="ETERNA corrugated packaging machine in studio" class="products__img-photo" loading="lazy">
-              <div class="products__img-tag products__img-tag--light" aria-hidden="true">
-                <span class="products__img-tag-line"></span>
-                <span>ETERNA Corrugated Series</span>
-              </div>
-            </div>
-          </div>
+            <p class="products__intro-body">Brausse Group is the exclusive North American dealer for ETERNA and ETERNA ELITE. You get BOBST Group engineering scaled to the true speed of carton and corrugated production, without the inflated enterprise pricing.</p>
 
-          <!-- Panel -->
-          <div class="products__panel">
             <nav class="products__tabs" role="tablist" aria-label="Product categories">
-              <button class="products__tab products__tab--active"
-                      role="tab"
-                      aria-selected="true"
-                      aria-controls="tab-folding-carton"
-                      id="tab-btn-fc"
-                      data-tab="folding-carton">
-                Folding Carton
-              </button>
-              <button class="products__tab"
-                      role="tab"
-                      aria-selected="false"
-                      aria-controls="tab-corrugated"
-                      id="tab-btn-corr"
-                      data-tab="corrugated">
-                Corrugated
-              </button>
+              <button class="products__tab products__tab--active" role="tab" aria-selected="true" aria-controls="tab-folding-carton" id="tab-btn-fc" data-tab="folding-carton">Folding Carton</button>
+              <button class="products__tab" role="tab" aria-selected="false" aria-controls="tab-corrugated" id="tab-btn-corr" data-tab="corrugated">Corrugated</button>
             </nav>
 
             <div class="products__content" id="tab-folding-carton" role="tabpanel" aria-labelledby="tab-btn-fc">
-              <h3>Folding Carton</h3>
-              <p>Die-cutters and folder-gluers designed for the realities of mid-market production. They are BOBST-engineered, locally supported, and built to run every shift.</p>
-              <p>Right now, the <a href="https://www.brausse.com/eterna-ecut-1060e" class="products__link"><strong>ETERNA eCUT 1060 ELITE ER</strong></a> is the clear favorite. With 47+ machines already on the floor across the US and Canada, it's the machine taking over the mid-market.</p>
+              <p>Die-cutters and folder-gluers built for the realities of mid-market production: BOBST-engineered, locally supported, and built to run every shift. Right now the <a href="https://www.brausse.com/eterna-ecut-1060e" class="products__link"><strong>ETERNA eCUT 1060 ELITE ER</strong></a> is the clear favorite, with 47+ machines already on floors across the US and Canada.</p>
               <a href="#" class="btn btn--secondary">Explore Folding Carton Equipment</a>
             </div>
 
             <div class="products__content" id="tab-corrugated" role="tabpanel" aria-labelledby="tab-btn-corr" hidden>
-              <h3>Corrugated</h3>
-              <p>Corrugated operations demand more. ETERNA delivers it. The same no-nonsense reliability, scaled up for the heavier volumes you run and supported long after the installation.</p>
+              <p>Corrugated operations demand more. ETERNA delivers it: the same no-nonsense reliability, scaled up for the heavier volumes you run and supported long after the installation.</p>
               <a href="#" class="btn btn--secondary">Explore Corrugated Equipment</a>
             </div>
           </div>
-        </div>
 
+          <!-- RIGHT — machine slider -->
+          <div class="products__slider reveal-item">
+            <div class="products__slides" aria-live="polite">
+              <figure class="products__slide products__slide--active" data-tab="folding-carton">
+                <img src="prototype/assets/image-2.png" alt="ETERNA eCUT 1060 ELITE ER folding carton die cutter">
+                <figcaption class="products__slide-tag"><span class="products__img-tag-line" aria-hidden="true"></span>eCUT 1060 ELITE ER</figcaption>
+              </figure>
+              <figure class="products__slide" data-tab="corrugated">
+                <img src="prototype/assets/image-4.png" alt="ETERNA corrugated packaging line in studio" loading="lazy">
+                <figcaption class="products__slide-tag"><span class="products__img-tag-line" aria-hidden="true"></span>ETERNA Corrugated Series</figcaption>
+              </figure>
+            </div>
+            <div class="products__slider-ctrl">
+              <button class="products__arrow" data-dir="prev" aria-label="Previous machine">&lsaquo;</button>
+              <div class="products__dots" aria-hidden="true">
+                <button class="products__dot products__dot--active" data-tab="folding-carton" tabindex="-1"></button>
+                <button class="products__dot" data-tab="corrugated" tabindex="-1"></button>
+              </div>
+              <button class="products__arrow" data-dir="next" aria-label="Next machine">&rsaquo;</button>
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
 
