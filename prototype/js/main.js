@@ -14,13 +14,29 @@
   (function initHeader() {
     const header = document.getElementById('site-header');
     const hero   = document.querySelector('.hero');
-    if (!header || !hero) return;
+    if (!header) return;
 
-    const obs = new IntersectionObserver(
-      ([entry]) => header.classList.toggle('is-solid', !entry.isIntersecting),
-      { threshold: 0, rootMargin: `-${header.offsetHeight}px 0px 0px 0px` }
-    );
-    obs.observe(hero);
+    // Scroll-position based (robust with sticky-stacked sections, where
+    // the hero stays pinned and an IntersectionObserver wouldn't fire).
+    function threshold() {
+      return (hero ? hero.offsetHeight : window.innerHeight) * 0.7;
+    }
+
+    let ticking = false;
+    function update() {
+      header.classList.toggle('is-solid', window.scrollY > threshold());
+      ticking = false;
+    }
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
   })();
 
 

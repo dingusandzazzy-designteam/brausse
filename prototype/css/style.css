@@ -72,7 +72,9 @@ body {
   line-height: 1.7;
   color: var(--c-text);
   background: var(--c-bg);
-  overflow-x: hidden;
+  /* `clip` (not `hidden`) prevents horizontal overflow WITHOUT
+     establishing a scroll container, so position:sticky keeps working. */
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -1353,6 +1355,56 @@ h1, h2, h3, h4 {
 
 .footer__social a:hover {
   color: var(--c-text-inv);
+}
+
+
+/* ================================================================
+   STACKING SCROLL — desktop only
+   Each panel pins to the top; the next scrolls up and covers it,
+   building a layered stack. Pure CSS position:sticky, no hijacking.
+   Panels are viewport-height so content is never hidden under the
+   covering panel. Disabled ≤1024px (normal flow) to protect content
+   on shorter screens.
+================================================================ */
+@media (min-width: 1025px) and (min-height: 720px) {
+  .stack > section {
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
+    /* Crisp seam + soft depth so the overlap reads as physical layers */
+    box-shadow:
+      0 -1px 0 0 var(--c-border-l),
+      0 -40px 80px -32px oklch(8% 0.005 20 / 0.55);
+  }
+
+  /* Dark panels seam against a dark border, not the light one */
+  .stack > .hero,
+  .stack > .chapter--dark,
+  .stack > .lifecycle,
+  .stack > .closing-cta {
+    box-shadow:
+      0 -1px 0 0 var(--c-border),
+      0 -40px 80px -32px oklch(8% 0.005 20 / 0.6);
+  }
+
+  /* Center each panel's content within the viewport-height frame.
+     Hero keeps its own bottom-aligned flex composition. */
+  .stack > section:not(.hero) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Trim the tall editorial padding so content-dense panels fit 100vh */
+  .stack > .metrics,
+  .stack > .products,
+  .stack > .lifecycle {
+    padding-block: clamp(4rem, 9vh, 7rem);
+  }
+
+  .stack > .closing-cta {
+    min-height: 100vh;
+  }
 }
 
 
