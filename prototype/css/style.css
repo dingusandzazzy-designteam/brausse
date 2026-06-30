@@ -141,8 +141,25 @@ h1, h2, h3, h4 {
   text-transform: uppercase;
   padding: 0.875rem 2rem;
   border-radius: 3px;
-  transition: background 200ms var(--ease-out), color 200ms var(--ease-out), border-color 200ms var(--ease-out);
+  transition:
+    background 220ms var(--ease-out),
+    color 220ms var(--ease-out),
+    border-color 220ms var(--ease-out),
+    transform 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out);
   white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover, .btn:active { transform: none; }
 }
 
 .btn--primary {
@@ -153,6 +170,7 @@ h1, h2, h3, h4 {
 .btn--primary:hover {
   background: var(--c-accent-dim);
   border-color: var(--c-accent-dim);
+  box-shadow: 0 8px 24px oklch(62% 0.163 55 / 0.28);
 }
 
 .btn--secondary {
@@ -192,11 +210,17 @@ h1, h2, h3, h4 {
 
 /* ----------------------------------------------------------------
    REVEAL ANIMATION
+   Scroll-triggered entrance. --reveal-delay set per-element by JS
+   for orchestrated staggering within a section.
 ---------------------------------------------------------------- */
 .reveal-item {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
+  transform: translateY(32px);
+  transition:
+    opacity 900ms var(--ease-out),
+    transform 900ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
 }
 
 .reveal-item.is-visible {
@@ -204,11 +228,28 @@ h1, h2, h3, h4 {
   transform: translateY(0);
 }
 
+/* Staggered children: parent carries [data-stagger], JS assigns each
+   child an incremental --reveal-delay once the group is in view. */
+[data-stagger] > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 800ms var(--ease-out),
+    transform 800ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-stagger].is-visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .reveal-item {
-    opacity: 1;
-    transform: none;
-    transition: none;
+  .reveal-item,
+  [data-stagger] > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
 
@@ -286,16 +327,39 @@ h1, h2, h3, h4 {
 }
 
 .header__nav a {
+  position: relative;
   font-size: var(--t-label);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--c-text-muted);
-  transition: color 200ms;
+  transition: color 200ms var(--ease-out);
+  padding-block: 0.25rem;
+}
+
+.header__nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: var(--c-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms var(--ease-out);
 }
 
 .header__nav a:hover {
   color: var(--c-text-inv);
+}
+
+.header__nav a:hover::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__nav a::after { transition: none; }
 }
 
 /* CTA */
@@ -390,11 +454,14 @@ h1, h2, h3, h4 {
   overflow: hidden;
 }
 
-/* Background media */
+/* Background media — extended vertically so parallax translate
+   never reveals an edge. Clipped by .hero overflow:hidden. */
 .hero__media {
   position: absolute;
-  inset: 0;
+  inset: -10% 0;
   z-index: 0;
+  transform: translate3d(0, var(--parallax, 0px), 0);
+  will-change: transform;
 }
 
 .hero__bg {
@@ -445,6 +512,31 @@ h1, h2, h3, h4 {
   width: 100%;
 }
 
+/* Orchestrated hero entrance — staggered fade-up on load.
+   Uses the `translate` property (not `transform`) so the button's
+   hover lift stays independent of the entrance animation. */
+.hero__content > * {
+  opacity: 0;
+  translate: 0 28px;
+  animation: hero-enter 1000ms var(--ease-out) forwards;
+}
+.hero__eyebrow  { animation-delay: 250ms; }
+.hero__headline { animation-delay: 400ms; }
+.hero__body     { animation-delay: 600ms; }
+.hero__content .btn { animation-delay: 780ms; }
+
+@keyframes hero-enter {
+  to { opacity: 1; translate: 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__content > * {
+    opacity: 1;
+    translate: none;
+    animation: none;
+  }
+}
+
 .hero__eyebrow {
   margin-bottom: 1.5rem;
 }
@@ -466,56 +558,6 @@ h1, h2, h3, h4 {
   max-width: 52ch;
 }
 
-/* Machine visual placeholder */
-.hero__visual {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding-bottom: var(--sp-lg);
-}
-
-.hero__machine-placeholder {
-  width: 100%;
-  aspect-ratio: 4/5;
-  max-height: 70vh;
-  background: oklch(93% 0.003 85);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero__machine-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center 85%;
-}
-
-.hero__machine-label {
-  position: absolute;
-  bottom: var(--sp-md);
-  left: var(--sp-md);
-  display: flex;
-  align-items: center;
-  gap: var(--sp-sm);
-  font-size: var(--t-label);
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--c-text-muted-l);
-  background: oklch(96% 0.003 85 / 0.85);
-  padding: 0.375rem 0.75rem;
-}
-
-.label-line {
-  display: block;
-  width: 32px;
-  height: 1px;
-  background: var(--c-accent);
-  flex-shrink: 0;
-}
-
 /* Scroll indicator */
 .hero__scroll {
   position: absolute;
@@ -526,6 +568,12 @@ h1, h2, h3, h4 {
   flex-direction: column;
   align-items: flex-start;
   gap: var(--sp-sm);
+  opacity: 0;
+  animation: hero-enter 800ms var(--ease-out) 1100ms forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__scroll { opacity: 1; animation: none; }
 }
 
 .hero__scroll-label {
@@ -895,6 +943,24 @@ h1, h2, h3, h4 {
   margin-bottom: var(--sp-md);
 }
 
+.products__link {
+  color: var(--c-text);
+  text-decoration: none;
+  background-image: linear-gradient(var(--c-accent), var(--c-accent));
+  background-size: 0% 1.5px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 300ms var(--ease-out);
+}
+
+.products__link:hover {
+  background-size: 100% 1.5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .products__link { transition: none; }
+}
+
 
 /* ================================================================
    INDUSTRY CHAPTERS
@@ -908,6 +974,25 @@ h1, h2, h3, h4 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 80vh;
+}
+
+/* Cinematic image reveal — scale settles as the spread enters view */
+.chapter__media {
+  overflow: hidden;
+}
+
+.chapter__img {
+  transform: scale(1.14);
+  transition: transform 1600ms var(--ease-out);
+  will-change: transform;
+}
+
+.chapter__inner.is-visible .chapter__img {
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chapter__img { transform: none; transition: none; }
 }
 
 /* Light chapter */
@@ -1086,7 +1171,9 @@ h1, h2, h3, h4 {
 
 .closing-cta__media {
   position: absolute;
-  inset: 0;
+  inset: -12% 0;
+  transform: translate3d(0, var(--parallax, 0px), 0);
+  will-change: transform;
 }
 
 .closing-cta__bg {
@@ -1324,13 +1411,12 @@ h1, h2, h3, h4 {
 
   /* Hero */
   .hero__inner {
-    grid-template-columns: 1fr;
-    padding-bottom: var(--sp-2xl);
-    align-items: start;
+    align-items: flex-end;
+    padding-bottom: calc(var(--sp-2xl) + var(--sp-md));
     padding-top: calc(var(--header-h) + var(--sp-lg));
   }
 
-  .hero__visual {
+  .hero__scroll {
     display: none;
   }
 

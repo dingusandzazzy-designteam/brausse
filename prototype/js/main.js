@@ -61,13 +61,21 @@
 
 
   /* ----------------------------------------------------------------
-     SCROLL REVEAL
+     SCROLL REVEAL — block reveals + staggered groups
   ---------------------------------------------------------------- */
   (function initReveal() {
     if (prefersReducedMotion) return;
 
-    const items = document.querySelectorAll('.reveal-item');
-    if (!items.length) return;
+    const blocks = document.querySelectorAll('.reveal-item');
+    const groups = document.querySelectorAll('[data-stagger]');
+    if (!blocks.length && !groups.length) return;
+
+    // Assign an incremental entrance delay to each child of a stagger group.
+    groups.forEach(group => {
+      Array.from(group.children).forEach((child, i) => {
+        child.style.setProperty('--reveal-delay', (i * 90) + 'ms');
+      });
+    });
 
     const obs = new IntersectionObserver(
       (entries) => {
@@ -81,7 +89,50 @@
       { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
     );
 
-    items.forEach(el => obs.observe(el));
+    blocks.forEach(el => obs.observe(el));
+    groups.forEach(el => obs.observe(el));
+  })();
+
+
+  /* ----------------------------------------------------------------
+     PARALLAX — subtle depth on hero + closing media layers
+  ---------------------------------------------------------------- */
+  (function initParallax() {
+    if (prefersReducedMotion) return;
+
+    const layers = [
+      { el: document.querySelector('.hero__media'),        section: document.querySelector('.hero'),        factor: 0.08 },
+      { el: document.querySelector('.closing-cta__media'), section: document.querySelector('.closing-cta'), factor: 0.08 },
+    ].filter(l => l.el && l.section);
+
+    if (!layers.length) return;
+
+    const MAX_SHIFT = 70; // px — never exceed the media overflow margin
+    let ticking = false;
+
+    function update() {
+      const vh = window.innerHeight;
+      layers.forEach(({ el, section, factor }) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > vh) { ticking = false; return; }
+        const offset = rect.top + rect.height / 2 - vh / 2;
+        let shift = -offset * factor;
+        shift = Math.max(-MAX_SHIFT, Math.min(MAX_SHIFT, shift));
+        el.style.setProperty('--parallax', shift.toFixed(1) + 'px');
+      });
+      ticking = false;
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
   })();
 
 
