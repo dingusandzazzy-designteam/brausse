@@ -204,35 +204,6 @@
 
 
   /* ----------------------------------------------------------------
-     SVG MAP DOTS — trigger animation when in view
-  ---------------------------------------------------------------- */
-  (function initMapDots() {
-    const mapWrap = document.querySelector('.metrics__map-wrap');
-    if (!mapWrap) return;
-
-    if (prefersReducedMotion) {
-      mapWrap.querySelectorAll('.map-dot').forEach(d => {
-        d.style.opacity = '0.8';
-        d.style.animation = 'none';
-      });
-      return;
-    }
-
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          mapWrap.classList.add('map-active');
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    obs.observe(mapWrap);
-  })();
-
-
-  /* ----------------------------------------------------------------
      PRODUCT TABS
   ---------------------------------------------------------------- */
   (function initProductTabs() {

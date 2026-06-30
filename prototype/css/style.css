@@ -597,24 +597,25 @@ h1, h2, h3, h4 {
   margin-inline: auto;
   padding-inline: var(--gutter);
   display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr;
-  gap: 0;
-  align-items: start;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+  gap: clamp(2.5rem, 5vw, 6rem);
+  align-items: center;
 }
 
-.metrics__divider {
-  width: 1px;
-  background: var(--c-border-l);
-  align-self: stretch;
-  margin-inline: clamp(2rem, 4vw, 5rem);
+/* Left column — editorial data stack */
+.metrics__data {
+  display: flex;
+  flex-direction: column;
 }
 
-.metrics__item {
-  padding-block: var(--sp-sm);
+.metrics__data .metrics__item + .metrics__item {
+  margin-top: var(--sp-md);
+  padding-top: var(--sp-md);
+  border-top: 1px solid var(--c-border-l);
 }
 
 .metrics__number {
-  font-size: clamp(4.5rem, 9vw, 9rem);
+  font-size: clamp(2.75rem, 4.5vw, 4.25rem);
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1;
@@ -623,7 +624,7 @@ h1, h2, h3, h4 {
   display: flex;
   align-items: baseline;
   gap: 0.1em;
-  margin-bottom: var(--sp-sm);
+  margin-bottom: 0.75rem;
 }
 
 .metrics__suffix {
@@ -637,62 +638,69 @@ h1, h2, h3, h4 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-text-muted-l);
-  margin-bottom: var(--sp-sm);
-  max-width: 28ch;
+  margin-bottom: 0.5rem;
+  max-width: 34ch;
 }
 
 .metrics__body {
   font-size: var(--t-body);
   color: var(--c-text-muted-l);
   line-height: 1.6;
-  max-width: 36ch;
+  max-width: 42ch;
 }
 
-/* Map */
-.metrics__item--map {
-  position: relative;
-}
-
-.metrics__map-wrap {
-  margin-top: var(--sp-md);
-  max-width: 380px;
+/* Right column — North America installations map */
+.metrics__map {
+  margin: 0;
+  width: 100%;
 }
 
 .na-map {
   width: 100%;
   height: auto;
+  display: block;
   overflow: visible;
 }
 
 .na-map__land {
-  fill: none;
-  stroke: var(--c-border-l);
-  stroke-width: 1.5;
+  fill: oklch(93% 0.022 65);
+  stroke: oklch(70% 0.05 60);
+  stroke-width: 1.2;
   stroke-linejoin: round;
+}
+
+.na-map__lakes ellipse {
+  fill: var(--c-surface);
+  stroke: oklch(70% 0.05 60);
+  stroke-width: 1;
 }
 
 .map-dot {
   fill: var(--c-accent);
   opacity: 0;
   transform-origin: center;
-  animation: dot-appear 400ms var(--ease-out) forwards,
-             dot-pulse 3s 1s ease-in-out infinite;
-  animation-delay: calc(var(--i) * 180ms), calc(var(--i) * 180ms + 1200ms);
+}
+
+/* Dots animate in (staggered) once the map scrolls into view */
+.metrics__map.is-visible .map-dot {
+  animation: dot-appear 420ms var(--ease-out) forwards,
+             dot-pulse 3s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 110ms), calc(var(--i) * 110ms + 900ms);
 }
 
 @keyframes dot-appear {
   from { opacity: 0; transform: scale(0); }
-  to   { opacity: 0.9; transform: scale(1); }
+  to   { opacity: 0.92; transform: scale(1); }
 }
 
 @keyframes dot-pulse {
-  0%, 100% { opacity: 0.9; r: 4; }
-  50%       { opacity: 0.5; r: 5.5; }
+  0%, 100% { opacity: 0.92; r: 6; }
+  50%       { opacity: 0.5; r: 8; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .map-dot {
-    opacity: 0.8;
+    opacity: 0.88;
     animation: none;
   }
 }
@@ -702,12 +710,12 @@ h1, h2, h3, h4 {
   display: flex;
   flex-direction: column;
   gap: 0.1em;
-  margin-bottom: var(--sp-md);
+  margin-bottom: var(--sp-sm);
   line-height: 1;
 }
 
 .metrics__feature-word {
-  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  font-size: clamp(1.75rem, 3vw, 2.75rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--c-text);
@@ -1396,13 +1404,11 @@ h1, h2, h3, h4 {
   .metrics__inner {
     grid-template-columns: 1fr;
     gap: var(--sp-xl);
+    align-items: start;
   }
 
-  .metrics__divider {
-    width: 100%;
-    height: 1px;
-    margin-inline: 0;
-    margin-block: 0;
+  .metrics__map {
+    max-width: 720px;
   }
 
   .footer__inner {
@@ -1455,11 +1461,7 @@ h1, h2, h3, h4 {
 
   /* Metrics */
   .metrics__number {
-    font-size: clamp(3.5rem, 14vw, 5.5rem);
-  }
-
-  .metrics__map-wrap {
-    max-width: 100%;
+    font-size: clamp(3rem, 12vw, 4.5rem);
   }
 
   .metrics__feature-word {
