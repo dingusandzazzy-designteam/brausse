@@ -1,0 +1,14 @@
+# Project management & internal docs
+Documents/
+plan/
+workflow/
+handoff/
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.code-workspace
