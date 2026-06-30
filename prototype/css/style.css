@@ -1194,7 +1194,6 @@ h1, h2, h3, h4 {
   margin-inline: auto;
   padding-inline: var(--gutter);
   padding-block: var(--sp-2xl);
-  max-width: 800px;
 }
 
 .closing-cta__inner h2 {
@@ -1204,6 +1203,7 @@ h1, h2, h3, h4 {
   line-height: 1.05;
   color: var(--c-text-inv);
   margin-bottom: var(--sp-md);
+  max-width: 16ch;
 }
 
 .closing-cta__inner p {
@@ -1374,10 +1374,17 @@ h1, h2, h3, h4 {
 
   /* Center each panel's content within the viewport-height frame.
      Hero keeps its own bottom-aligned flex composition. */
+  /* Vertically center each panel. The inner gets width:100% so it does
+     not shrink-wrap (a flex/grid item with auto inline margins otherwise
+     sizes to its content and lands at an inconsistent left edge); with a
+     full width + max-width + margin-inline:auto it centers like a block. */
   .stack > section:not(.hero) {
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
+  .stack > section:not(.hero) > * {
+    width: 100%;
   }
 
   /* Trim the tall editorial padding so content-dense panels fit 100vh */

@@ -5,6 +5,10 @@ workflow/
 handoff/
 .claude/
 
+# Internal design/brand context (impeccable) — not for the public site
+PRODUCT.md
+DESIGN.md
+
 # OS
 .DS_Store
 Thumbs.db
